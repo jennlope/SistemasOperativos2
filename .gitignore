@@ -1,0 +1,21 @@
+# Archivos binarios y objetos
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+
+# Archivos de compilación / carpetas
+build/
+bin/
+*.dSYM
+
+# Archivos del editor
+*.swp
+*~
+.vscode/
+.idea/
+
+# Archivos temporales
+*.log
