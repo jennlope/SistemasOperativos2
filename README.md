@@ -1,115 +1,295 @@
-# Sistemas Operativos 2 -- Reto 1
+# Sistema de Chat Multi-Sala - Sistemas Operativos 2
 
-Este proyecto implementa un **servidor** y un **cliente** que se
-comunican mediante **colas de mensajes (System V Message Queues)** en C,
-como parte del curso **Sistemas Operativos 2**.
+Este proyecto implementa un **sistema completo de chat multi-sala** con un **servidor centralizado** y **múltiples clientes** que se comunican mediante **colas de mensajes System V** en C, desarrollado para el curso **Sistemas Operativos 2**.
 
-------------------------------------------------------------------------
+## Características Principales
 
-## Estructura del proyecto
-
-    SO2/
-    ├── cliente.c        # Implementación del cliente
-    ├── servidor.c       # Implementación del servidor
-    ├── Makefile         # Reglas de compilación
-    ├── .gitignore       # Exclusión de archivos innecesarios
-    └── README.md        # Documentación del proyecto
+- **Salas de chat múltiples** - Creación automática de salas
+- **Múltiples usuarios** - Hasta 20 usuarios por sala, 10 salas simultáneas
+- **Comunicación en tiempo real** - Mensajes instantáneos entre usuarios
+- **Multihilo** - Recepción asíncrona de mensajes en el cliente
+- **Gestión robusta de recursos** - Limpieza automática de colas System V
+- **Protocolo estructurado** - Tipos de mensaje bien definidos
 
 ------------------------------------------------------------------------
 
-## Flujo de ejecución
+## Estructura del Proyecto
 
-1.  **Compilación**
-
-    ``` bash
-    make
-    ```
-
-    Esto generará los binarios `cliente` y `servidor`.
-
-2.  **Ejecución del servidor**
-
-    ``` bash
-    ./servidor
-    ```
-
-    El servidor queda a la espera de mensajes entrantes.
-
-3.  **Ejecución del cliente**
-
-    ``` bash
-    ./cliente "mensaje de prueba"
-    ```
-
-    El cliente envía el mensaje al servidor mediante la cola de
-    mensajes.
-
-4.  **Respuesta**
-
-    -   El servidor procesa y muestra el mensaje recibido.
-    -   Dependiendo de la lógica, puede responder al cliente
-        (extensible).
+```
+SistemasOperativos2/
+├── servidor.c       # Servidor de chat multi-sala (completamente comentado)
+├── cliente.c        # Cliente de chat con interfaz de usuario (completamente comentado)  
+├── Makefile         # Reglas de compilación automática
+├── README.md        # Esta documentación
+└── .gitignore       # Exclusión de archivos temporales
+```
 
 ------------------------------------------------------------------------
 
-## Ejemplo de uso
+## Instalación y Ejecución
 
-En dos terminales diferentes:
+### 1. **Compilación**
+```bash
+make
+```
+Esto generará los ejecutables `servidor` y `cliente`.
 
-**Terminal 1 -- Servidor**
-
-``` bash
+### 2. **Iniciar el Servidor**
+```bash
 ./servidor
-Esperando mensajes...
-Recibido: "Hola servidor"
+```
+El servidor se iniciará y esperará conexiones de clientes:
+```
+=== Servidor de Chat Iniciado ===
+Cola global ID: 32768
+Esperando conexiones de clientes...
 ```
 
-**Terminal 2 -- Cliente**
+### 3. **Conectar Clientes**
+En terminales separadas, ejecutar múltiples clientes:
+```bash
+./cliente Juan
+./cliente Maria  
+./cliente Pedro
+```
 
-``` bash
-./cliente "Hola servidor"
-Mensaje enviado
+Cada cliente mostrará:
+```
+=== Cliente de Chat ===
+Bienvenid@, Juan!
+Conectado al servidor (Cola Global: 32768, Cola Privada: 32769)
+
+Comandos disponibles:
+  join <sala>  - Unirse a una sala de chat
+  <mensaje>    - Enviar mensaje a la sala actual
+  Ctrl+C       - Salir del cliente
+
+Salas sugeridas: General, Deportes, Tecnologia
+======================
+
+> 
 ```
 
 ------------------------------------------------------------------------
 
-## Cambios respecto al código base
+## Guía de Uso
 
-1.  **Separación de responsabilidades**
-    -   Se crearon dos archivos: `cliente.c` y `servidor.c`.\
-    -   Antes, la base tenía toda la lógica en un solo lugar; ahora está
-        dividido para mayor claridad.
-2.  **Makefile**
-    -   Se agregó un `Makefile` para simplificar la compilación (`make`,
-        `make clean`).
-3.  **Validación de argumentos**
-    -   El cliente ahora verifica que el usuario pase un mensaje como
-        argumento.\
-    -   En caso contrario, muestra un mensaje de uso correcto.
-4.  **Manejo de errores robusto**
-    -   Se añadieron verificaciones de retorno (`msgget`, `msgsnd`,
-        `msgrcv`).\
-    -   Si ocurre un error, se muestra `perror` y se termina la
-        ejecución limpiamente.
-5.  **Limpieza de recursos**
-    -   El servidor libera la cola de mensajes al finalizar (con
-        `msgctl(IPC_RMID)`).\
-    -   Esto evita fugas de recursos en el sistema.
-6.  **Compatibilidad y estilo**
-    -   Código documentado con comentarios claros.\
-    -   Uso de constantes y estructuras definidas para mejorar
-        legibilidad.
+### **Comandos Disponibles:**
+
+#### **Unirse a una Sala:**
+```bash
+> join General
+```
+- Si la sala no existe, se crea automáticamente
+- El servidor confirma la conexión
+
+#### **Enviar Mensajes:**
+```bash
+> Hola a todos!
+> ¿Cómo están?
+```
+- Los mensajes se distribuyen a todos los usuarios de la sala
+- El remitente no ve su propio mensaje (como en chats reales)
+
+#### **Salir del Cliente:**
+- `Ctrl+C` - Cierra el cliente y limpia recursos automáticamente
 
 ------------------------------------------------------------------------
 
-## Próximos pasos
+## Ejemplo de Sesión Completa
 
--   Agregar manejo de múltiples clientes concurrentes.
--   Implementar respuestas del servidor al cliente.
--   Extender protocolo de comunicación (códigos de operación).
+### **Terminal 1 - Servidor:**
+```bash
+$ ./servidor
+=== Servidor de Chat Iniciado ===
+Cola global ID: 32768
+Esperando conexiones de clientes...
+
+[JOIN] Usuario 'Juan' solicita unirse a sala 'General' (cola_cliente=32769)
+[INFO] Nueva sala creada: 'General' (ID=32770)
+[JOIN] Usuario 'Juan' agregado a sala 'General' (1/20 usuarios)
+
+[JOIN] Usuario 'Maria' solicita unirse a sala 'General' (cola_cliente=32771)
+[JOIN] Usuario 'Maria' agregado a sala 'General' (2/20 usuarios)
+
+[MSG] Sala='General', Usuario='Juan': Hola Maria!
+[DISTRIBUCIÓN] Enviando mensaje a 2 usuarios en sala 'General'
+
+[MSG] Sala='General', Usuario='Maria': ¡Hola Juan! ¿Cómo estás?
+[DISTRIBUCIÓN] Enviando mensaje a 2 usuarios en sala 'General'
+```
+
+### **Terminal 2 - Cliente Juan:**
+```bash
+$ ./cliente Juan
+=== Cliente de Chat ===
+Bienvenid@, Juan!
+...
+> join General
+Intentando unirse a la sala 'General'...
+
+[SERVIDOR] Bienvenido a la sala 'General'!
+> Hola Maria!
+
+[General] Maria: ¡Hola Juan! ¿Cómo estás?
+> Muy bien, gracias por preguntar
+```
+
+### **Terminal 3 - Cliente Maria:**
+```bash
+$ ./cliente Maria  
+=== Cliente de Chat ===
+Bienvenid@, Maria!
+...
+> join General
+Intentando unirse a la sala 'General'...
+
+[SERVIDOR] Bienvenido a la sala 'General'!
+
+[General] Juan: Hola Maria!
+> ¡Hola Juan! ¿Cómo estás?
+
+[General] Juan: Muy bien, gracias por preguntar
+> Me alegra saber eso :)
+```
 
 ------------------------------------------------------------------------
 
-## Autor
-Jennifer Andrea Lopez Gomez
-Santiago Alexander Cardenas Laverde
+## Arquitectura del Sistema
+
+### **Protocolo de Comunicación:**
+
+| Tipo | Nombre | Dirección | Descripción |
+|------|--------|-----------|-------------|
+| `1` | **JOIN** | Cliente → Servidor | Solicitud para unirse a una sala |
+| `2` | **RESP** | Servidor → Cliente | Respuestas y notificaciones del servidor |
+| `3` | **MSG** | Cliente → Servidor | Mensaje de chat a distribuir |
+| `4` | **CHAT** | Servidor → Cliente | Mensaje distribuido a usuarios de sala |
+
+### **Componentes del Sistema:**
+
+#### **Servidor (`servidor.c`)**
+- **Cola Global**: Recibe todas las solicitudes de clientes
+- **Gestión de Salas**: Crea y administra hasta 10 salas simultáneas
+- **Distribución de Mensajes**: Envía mensajes a colas privadas de usuarios
+- **Limpieza Automática**: Elimina colas System V al terminar
+
+#### **Cliente (`cliente.c`)**
+- **Cola Privada**: Recibe respuestas del servidor y mensajes de otros usuarios
+- **Interfaz de Usuario**: Comandos simples e intuitivos
+- **Multihilo**: Hilo separado para recepción asíncrona de mensajes
+- **Gestión de Estado**: Mantiene información de sala actual
+
+### **Flujo de Datos:**
+1. **Cliente** envía mensaje JOIN/MSG a **Cola Global**
+2. **Servidor** procesa mensaje y actualiza estructuras internas
+3. **Servidor** distribuye mensajes CHAT a **Colas Privadas** de usuarios
+4. **Clientes** reciben mensajes asíncronamente en hilo separado
+
+------------------------------------------------------------------------
+
+## Detalles Técnicos
+
+### **Límites del Sistema:**
+- **Máximo de salas:** 10 simultáneas
+- **Usuarios por sala:** 20 máximo
+- **Longitud de mensaje:** 256 caracteres
+- **Longitud de nombres:** 50 caracteres
+
+### **Tecnologías Utilizadas:**
+- **IPC System V Message Queues** - Comunicación entre procesos
+- **POSIX Threads** - Recepción asíncrona en cliente
+- **Signal Handling** - Limpieza automática con Ctrl+C
+- **ftok()** - Generación de claves únicas para colas
+
+### **Gestión de Memoria:**
+- **Sin allocación dinámica** - Uso de arrays estáticos para estabilidad
+- **Limpieza automática** - Eliminación de colas al terminar procesos
+- **Manejo de errores robusto** - Validación en todas las operaciones IPC
+
+------------------------------------------------------------------------
+
+## Comandos de Desarrollo
+
+### **Compilación:**
+```bash
+make                # Compilar ambos programas
+make servidor      # Solo servidor
+make cliente       # Solo cliente
+make clean         # Limpiar archivos objeto
+```
+
+### **Debugging:**
+```bash
+# Ver colas de mensajes activas
+ipcs -q
+
+# Eliminar colas manualmente (si es necesario)
+ipcrm -q <id_cola>
+
+# Monitorear procesos
+ps aux | grep -E "(servidor|cliente)"
+```
+
+### **Testing:**
+```bash
+# Terminal 1: Servidor
+./servidor
+
+# Terminal 2-4: Múltiples clientes
+./cliente Alice &
+./cliente Bob &  
+./cliente Charlie &
+
+# Todos pueden unirse a la misma sala y chatear
+```
+
+------------------------------------------------------------------------
+
+## Solución de Problemas
+
+### **Error: "No se puede conectar al servidor"**
+- **Causa:** El servidor no está ejecutándose
+- **Solución:** Ejecutar `./servidor` primero
+
+### **Error: "msgget: File exists"**
+- **Causa:** Colas de mensajes previas no eliminadas
+- **Solución:** `ipcrm -q $(ipcs -q | awk '/32768/ {print $2}')`
+
+### **Comportamiento inesperado:**
+- **Verificar:** Que servidor y cliente estén compilados con la misma estructura `struct mensaje`
+- **Restart:** Terminar todos los procesos y reiniciar servidor
+
+------------------------------------------------------------------------
+
+## Características Avanzadas del Código
+
+### **Comentarios Comprehensivos:**
+- **Documentación completa** en español
+- **Explicación de estructuras** de datos
+- **Flujo de funciones** paso a paso
+- **Manejo de errores** documentado
+
+### **Mejores Prácticas:**
+- **Terminación nula** explícita en strings
+- **Validación de límites** en arrays
+- **Limpieza de recursos** automática
+- **Manejo de señales** robusto
+
+### **Extensibilidad:**
+- Fácil agregar nuevos tipos de mensaje
+- Configuración de límites mediante constantes
+- Estructura modular para nuevas funcionalidades
+
+------------------------------------------------------------------------
+
+## Autores
+
+- **Jennifer Andrea Lopez Gomez**
+- **Santiago Alexander Cardenas Laverde**
+
+---
+
+**Curso:** Sistemas Operativos  
+**Institución:** Universidad EAFIT
+**Año:** 2025
