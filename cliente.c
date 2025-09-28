@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    printf("Bienvenido, %s. Salas disponibles: General, Deportes\n", nombre_usuario);
+    printf("Bienvenid@, %s. Salas disponibles: General, Deportes\n", nombre_usuario);
 
     // hilo receptor
     pthread_t hilo;
