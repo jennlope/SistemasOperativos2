@@ -39,7 +39,7 @@
 #include <errno.h>        // códigos de error del sistema
 
 /* ==================== CONSTANTES Y CONFIGURACIÓN ==================== */
-#define MAX_SALAS 10                    // Número máximo de salas de chat simultáneas
+#define MAX_SALAS 4                    // Número máximo de salas de chat simultáneas
 #define MAX_USUARIOS_POR_SALA 20        // Límite de usuarios por sala individual
 #define MAX_TEXTO 256                   // Longitud máxima de un mensaje de texto
 #define MAX_NOMBRE 50                   // Longitud máxima para nombres de usuario y salas
@@ -557,6 +557,6 @@ int main() {
         }
     }
     
-    // Aca nunca llega... o si?
+    // Aca nunca llega...
     return 0;
 }

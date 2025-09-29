@@ -1,21 +1,21 @@
-# 💬 Sistema de Chat Multi-Sala Avanzado - Sistemas Operativos 2
+# Sistema de Chat Multi-Sala Avanzado - Sistemas Operativos 2
 
 Este proyecto implementa un **sistema completo de chat multi-sala** con **servidor centralizado** y **múltiples clientes** que se comunican mediante **colas de mensajes System V** en C. Incluye funcionalidades avanzadas como historial persistente, comandos administrativos y gestión dinámica de usuarios.
 
-## ✨ Características Principales
+## Características Principales
 
-- 🏠 **Salas de chat múltiples** - Creación automática y gestión dinámica
-- 👥 **Múltiples usuarios** - Hasta 20 usuarios por sala, 10 salas simultáneas  
-- ⚡ **Comunicación en tiempo real** - Mensajes instantáneos bidireccionales
-- 🧵 **Multihilo** - Recepción asíncrona en cliente con pthread
-- 📝 **Historial persistente** - Archivos automáticos por sala (.txt)
-- 🎮 **Comandos avanzados** - join, /leave, /list, /users
-- 🛡️ **Gestión robusta** - Limpieza automática de recursos System V
-- 📊 **Monitoreo** - Logs detallados y información de estado
+- **Salas de chat múltiples** - Creación automática y gestión dinámica
+- **Múltiples usuarios** - Hasta 20 usuarios por sala, 10 salas simultáneas  
+- **Comunicación en tiempo real** - Mensajes instantáneos bidireccionales
+- **Multihilo** - Recepción asíncrona en cliente con pthread
+- **Historial persistente** - Archivos automáticos por sala (.txt)
+- **Comandos avanzados** - join, /leave, /list, /users
+- **Gestión robusta** - Limpieza automática de recursos System V
+- **Monitoreo** - Logs detallados y información de estado
 
 ------------------------------------------------------------------------
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 SistemasOperativos2/
@@ -29,7 +29,7 @@ SistemasOperativos2/
 
 ------------------------------------------------------------------------
 
-## 🚀 Instalación y Ejecución
+## Instalación y Ejecución
 
 ### 1. **Compilación**
 ```bash
@@ -79,9 +79,9 @@ Comandos disponibles:
 
 ------------------------------------------------------------------------
 
-## 💡 Guía de Comandos Avanzados
+## Guía de Comandos Avanzados
 
-### **📋 Comandos Disponibles:**
+### **Comandos Disponibles:**
 
 | Comando | Descripción | Ejemplo | Tipo de Mensaje |
 |---------|-------------|---------|------------------|
@@ -92,7 +92,7 @@ Comandos disponibles:
 | `<mensaje>` | Enviar mensaje a la sala | `Hola a todos!` | **3 (MSG)** |
 | `Ctrl+C` | Salir del cliente/servidor | - | **Señal** |
 
-### **🎮 Flujo de Uso Típico:**
+### **Flujo de Uso Típico:**
 1. **Conectarse:** `./cliente TuNombre`
 2. **Ver salas:** `/list`
 3. **Unirse:** `join General` 
@@ -103,7 +103,7 @@ Comandos disponibles:
 
 ------------------------------------------------------------------------
 
-## 📋 Ejemplo de Sesión Completa
+## Ejemplo de Sesión Completa
 
 ### **Terminal 1 - Servidor:**
 ```bash
@@ -181,23 +181,23 @@ Abandonando sala 'Deportes'...
 
 ------------------------------------------------------------------------
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 ### **Protocolo de Comunicación Avanzado:**
 
 | Tipo | Nombre | Dirección | Descripción | Implementado |
 |------|--------|-----------|-------------|--------------|
-| `1` | **JOIN** | Cliente → Servidor | Solicitud para unirse a una sala | ✅ |
-| `2` | **RESP** | Servidor → Cliente | Respuestas y notificaciones del servidor | ✅ |
-| `3` | **MSG** | Cliente → Servidor | Mensaje de chat a distribuir en sala | ✅ |
-| `4` | **CHAT** | Servidor → Cliente | Mensaje distribuido a usuarios de sala | ✅ |
-| `5` | **LEAVE** | Cliente → Servidor | Abandonar sala actual | ✅ |
-| `6` | **USERS** | Cliente → Servidor | Solicitar lista de usuarios en sala | ✅ |
-| `7` | **LIST** | Cliente → Servidor | Solicitar lista de salas disponibles | ✅ |
+| `1` | **JOIN** | Cliente → Servidor | Solicitud para unirse a una sala | |
+| `2` | **RESP** | Servidor → Cliente | Respuestas y notificaciones del servidor | |
+| `3` | **MSG** | Cliente → Servidor | Mensaje de chat a distribuir en sala | |
+| `4` | **CHAT** | Servidor → Cliente | Mensaje distribuido a usuarios de sala | |
+| `5` | **LEAVE** | Cliente → Servidor | Abandonar sala actual | |
+| `6` | **USERS** | Cliente → Servidor | Solicitar lista de usuarios en sala | |
+| `7` | **LIST** | Cliente → Servidor | Solicitar lista de salas disponibles | |
 
 ### **Componentes del Sistema:**
 
-#### **🖥️ Servidor (`servidor.c`)**
+#### **Servidor (`servidor.c`)**
 - **Cola Global**: Recibe todas las solicitudes de clientes (ftok "/tmp" 'A')
 - **Gestión de Salas**: Crea y administra hasta 10 salas simultáneas
 - **Distribución de Mensajes**: Envía a colas privadas de usuarios
@@ -205,14 +205,14 @@ Abandonando sala 'Deportes'...
 - **Comandos Administrativos**: Lista de salas y usuarios
 - **Limpieza Automática**: Elimina colas System V al terminar
 
-#### **👤 Cliente (`cliente.c`)**
+#### **Cliente (`cliente.c`)**
 - **Cola Privada**: Recibe respuestas del servidor y mensajes (IPC_PRIVATE)
 - **Interfaz de Usuario**: Comandos intuitivos y feedback en tiempo real
 - **Multihilo**: Hilo separado para recepción asíncrona de mensajes
 - **Gestión de Estado**: Mantiene sala actual y conexión al servidor
 - **Comandos Avanzados**: join, /leave, /list, /users + mensajes
 
-### **🔄 Flujo de Datos:**
+### **Flujo de Datos:**
 1. **Cliente** envía mensaje (JOIN/MSG/LEAVE/LIST/USERS) a **Cola Global**
 2. **Servidor** procesa mensaje y actualiza estructuras internas
 3. **Servidor** responde con RESP y/o distribuye CHAT a **Colas Privadas**
@@ -221,7 +221,7 @@ Abandonando sala 'Deportes'...
 
 ------------------------------------------------------------------------
 
-## 🛠️ Detalles Técnicos Avanzados
+## Detalles Técnicos Avanzados
 
 ### **Límites del Sistema:**
 - **Salas máximas:** 10 simultáneas (configurable con MAX_SALAS)
@@ -252,7 +252,7 @@ Abandonando sala 'Deportes'...
 
 ------------------------------------------------------------------------
 
-## 📊 Comandos de Desarrollo
+## Comandos de Desarrollo
 
 ### **Compilación:**
 ```bash
@@ -298,7 +298,7 @@ tail -f General.txt
 
 ------------------------------------------------------------------------
 
-## 🚨 Solución de Problemas
+## Solución de Problemas
 
 ### **Error: "No se puede conectar al servidor"**
 - **Causa:** El servidor no está ejecutándose
@@ -328,31 +328,31 @@ tail -f General.txt
 
 ------------------------------------------------------------------------
 
-## 📈 Características del Código Documentado
+## Características del Código Documentado
 
 ### **Documentación Comprensiva:**
-- ✅ **Comentarios completos** in español para mejor comprensión
-- ✅ **Headers de funciones** con parámetros y valores de retorno
-- ✅ **Explicación de estructuras** de datos y su propósito
-- ✅ **Flujo de operaciones** paso a paso documentado
-- ✅ **Manejo de errores** explicado en detalle
+- **Comentarios completos** in español para mejor comprensión
+- **Headers de funciones** con parámetros y valores de retorno
+- **Explicación de estructuras** de datos y su propósito
+- **Flujo de operaciones** paso a paso documentado
+- **Manejo de errores** explicado en detalle
 
 ### **Mejores Prácticas Implementadas:**
-- ✅ **Terminación nula segura** en todas las operaciones de string
-- ✅ **Validación de parámetros** en todas las funciones
-- ✅ **Limpieza de recursos** automática y manual
-- ✅ **Manejo robusto de señales** para terminación limpia
-- ✅ **Logs informativos** para debugging y monitoreo
+- **Terminación nula segura** en todas las operaciones de string
+- **Validación de parámetros** en todas las funciones
+- **Limpieza de recursos** automática y manual
+- **Manejo robusto de señales** para terminación limpia
+- **Logs informativos** para debugging y monitoreo
 
 ### **Arquitectura Extensible:**
-- 🔧 **Configuración flexible** mediante constantes
-- 🔧 **Protocolo extensible** - fácil agregar nuevos tipos de mensaje
-- 🔧 **Modularidad** - funciones bien definidas y reutilizables
-- 🔧 **Escalabilidad** - límites configurables para producción
+- **Configuración flexible** mediante constantes
+- **Protocolo extensible** - fácil agregar nuevos tipos de mensaje
+- **Modularidad** - funciones bien definidas y reutilizables
+- **Escalabilidad** - límites configurables para producción
 
 ------------------------------------------------------------------------
 
-## 👥 Autores
+## Autores
 
 - **Jennifer Andrea Lopez Gomez**
 - **Santiago Alexander Cardenas Laverde**
@@ -362,19 +362,19 @@ tail -f General.txt
 **Curso:** Sistemas Operativos 2  
 **Proyecto:** Sistema de Chat Multi-Sala con IPC System V  
 **Año:** 2025  
-**Institución:** Universidad
+**Institución:** Universidad EAFIT
 
-### **📄 Licencia**
+### **Licencia**
 Este proyecto es desarrollado con fines académicos para el curso de Sistemas Operativos 2.
 
-### **🤝 Contribuciones**
+### **Contribuciones**
 El código está completamente documentado y es ideal para:
-- 🎓 **Aprendizaje de IPC** en sistemas Unix/Linux
-- 👨‍💻 **Referencia de programación** en C con System V
-- 📚 **Material educativo** sobre comunicación entre procesos
-- 🏆 **Ejemplo de mejores prácticas** en programación de sistemas
+- **Aprendizaje de IPC** en sistemas Unix/Linux
+- **Referencia de programación** en C con System V
+- **Material educativo** sobre comunicación entre procesos
+- **Ejemplo de mejores prácticas** en programación de sistemas
 
-### **⭐ Características Destacadas**
+### **Características Destacadas**
 Este proyecto demuestra dominio de:
 - **Colas de Mensajes System V** - Comunicación robusta entre procesos
 - **Programación Multihilo** - pthread para manejo asíncrono
