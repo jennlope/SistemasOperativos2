@@ -5,6 +5,7 @@
 *.out
 *.a
 *.so
+*.txt
 
 # Archivos de compilación / carpetas
 build/
